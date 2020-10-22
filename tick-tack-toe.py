@@ -46,8 +46,9 @@ class Game(object):
     def whose_win(self):
         for coords in self.generate_coords():
             flag = -1
+
             for x, y in coords:
-                if self.field[x][y] != -1 and flag == -1 or flag == self.field[x][y]:
+                if self.field[x][y] != -1 and (flag == -1 or flag == self.field[x][y]):
                     flag = self.field[x][y]
                 else:
                     flag = -1
