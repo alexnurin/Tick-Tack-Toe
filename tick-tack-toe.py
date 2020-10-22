@@ -15,7 +15,7 @@ class Game(object):
         self.symbols = {0: 'x', 1: 'o', -1: '-'}
 
     def check_inside(self, x1, y1, x2, y2):
-        return x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0 and x1 < self.size and x2 < self.size and y1 < self.size and y2 < self.size
+        return x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0 and x1 <= self.size and x2 <= self.size and y1 <= self.size and y2 <= self.size
 
     def generate_coords(self):
         for i in range(self.size):
@@ -46,7 +46,6 @@ class Game(object):
     def whose_win(self):
         for coords in self.generate_coords():
             flag = -1
-
             for x, y in coords:
                 if self.field[x][y] != -1 and (flag == -1 or flag == self.field[x][y]):
                     flag = self.field[x][y]
@@ -88,7 +87,9 @@ if __name__ == '__main__':
     print(a)
     a.move(3, 2)
     print(a)
+    a.move(3, 3)
+    print(a)
     a.move(1, 1)
     print(a)
-    a.move(3, 3)
+    a.move(4, 4)
     print(a)
