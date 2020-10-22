@@ -23,7 +23,8 @@ class Game(object):
         return 0
 
     def __str__(self):
-        return '\n'.join([' '.join(str(element)) for element in self.field])
+        d = {0: 'x', 1: 'o', -1: '-'}
+        return '\n'.join([' '.join(map(lambda element: d[element], row)) for row in self.field])
 
 
 if __name__ == '__main__':
