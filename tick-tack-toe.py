@@ -14,6 +14,19 @@ class Game(object):
         self.abreast = in_row_to_win
         self.symbols = {0: 'x', 1: 'o', -1: '-'}
 
+    def check_inside(self, x1, y1, x2, y2):
+        return x1 >= 0 and x2 >= 0 and y1 >= 0 and y2 >= 0 and x1 < self.size and x2 < self.size and y1 < self.size and y2 < self.size
+
+    def generate_coords(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.check_inside(i, j, i + self.abreast, j + self.abreast):
+                    yield [(i + delta, j + delta) for delta in range(self.abreast)]
+                if self.check_inside(i, j, i + self.abreast, j):
+                    yield [(i + delta, j) for delta in range(self.abreast)]
+                if self.check_inside(i, j, i, j + self.abreast):
+                    yield [(i, j + delta) for delta in range(self.abreast)]
+
     def player2name(self, player):
         if player == 0:
             return self.name0
@@ -31,6 +44,16 @@ class Game(object):
         return self.player2name(self.next_move())
 
     def whose_win(self):
+        for coords in self.generate_coords():
+            flag = -1
+            for x, y in coords:
+                if self.field[x][y] != -1 and flag == -1 or flag == self.field[x][y]:
+                    flag = self.field[x][y]
+                else:
+                    flag = -1
+                    break
+            if flag != -1:
+                return flag
         return -1
 
     def move(self, x, y):
@@ -40,24 +63,31 @@ class Game(object):
         if self.field[x][y] == -1:
             self.field[x][y] = next_symbol
         else:
-            print(f"Error: place {x+1}-{y+1} is taken")
+            print(f"Error: place {x + 1}-{y + 1} is taken")
             return
         if self.whose_win() != -1:
-            print(self.player2name(self.whose_win()))
+            print(self.player2name(self.whose_win()) + " - winner!")
 
     def __str__(self):
-        return '\n'.join([' '.join(map(lambda element: self.symbols[element], row)) for row in self.field])
+        return '\n'.join([' '.join(map(lambda element: self.symbols[element], row)) for row in self.field]) + '\n'
 
 
 if __name__ == '__main__':
-    a = Game(field_size=4, name0='Alex', name1='God')
+    a = Game(field_size=4, name0='Alex', name1='God', in_row_to_win=3)
     print(a)
-    print(a.whose_move())
     a.move(1, 2)
     print(a)
-    print(a.whose_move())
-    a.move(2, 1)
+    a.move(4, 2)
     print(a)
-    print(a.whose_move())
-    a.move(2, 1)
+    a.move(2, 2)
+    print(a)
+    a.move(3, 1)
+    print(a)
+    a.move(4, 1)
+    print(a)
+    a.move(3, 2)
+    print(a)
+    a.move(1, 1)
+    print(a)
+    a.move(3, 3)
     print(a)
